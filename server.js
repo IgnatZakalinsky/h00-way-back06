@@ -1,16 +1,19 @@
 const http = require('http')
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
     switch (req.url) {
         case '/': { // http://localhost:3000/
             console.log(1)
-            const start = new Date()
-            while (new Date() - start < 5000) {} // (02.04.2024)
-            console.log('stop')
             break
         }
         case '/2': { // http://localhost:3000/2
             console.log(2)
+            await new Promise(resolve => { // иногда становиться в очередь, хз почему (02.04.2024)
+                setTimeout(() => {
+                    console.log('stop ' + new Date())
+                    resolve(true) // or any 
+                }, 5000)
+            })
             break
         }
         default: { // http://localhost:3000/favicon.ico
